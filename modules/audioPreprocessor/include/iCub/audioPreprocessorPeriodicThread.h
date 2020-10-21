@@ -85,6 +85,7 @@ private:
 	 *  Yarp Ports for Sending and Receiving Data from this Periodic Thread.
 	 * =========================================================================== */
 	ySoundBuffer  inRawAudioPort;
+    yMatrixBuffer outRawPowerPort;
 	yMatrixBuffer outGammatoneFilteredAudioPort;
 	yMatrixBuffer outGammatoneFilteredPowerPort;
 	yMatrixBuffer outGammatoneFilteredWindowPort;
@@ -109,6 +110,7 @@ private:
 	yarp::sig::Sound* inputSound;
 	
 	yMatrix RawAudioMatrix;
+    yMatrix RawPowerMatrix;
 	yMatrix GammatoneFilteredAudioMatrix;
 	yMatrix GammatoneFilteredPowerMatrix;
 	yMatrix GammatoneFilteredWindowMatrix;

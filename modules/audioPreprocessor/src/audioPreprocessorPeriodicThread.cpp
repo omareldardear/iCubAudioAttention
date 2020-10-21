@@ -113,6 +113,9 @@ bool AudioPreprocessorPeriodicThread::configure(yarp::os::ResourceFinder &rf) {
 	RawAudioMatrix.resize(numMics, numFrameSamples);
 	RawAudioMatrix.zero();
 
+    RawPowerMatrix.resize(numMics,1);
+    RawAudioMatrix.zero();
+
 	GammatoneFilteredAudioMatrix.resize(numMics * numBands, numFrameSamples);
 	GammatoneFilteredAudioMatrix.zero();
 
@@ -238,6 +241,11 @@ bool AudioPreprocessorPeriodicThread::threadInit() {
 		return false;
 	}
 
+    if (!outRawPowerPort.open(getName("/rawPower:o").c_str())) {
+        yError("Unable to open port for sending the output of the raw power");
+        return false;
+    }
+
 	if (!outGammatoneFilteredAudioPort.open(getName("/gammatoneFilteredAudio:o").c_str())) {
 		yError("Unable to open port for sending the output of the gammatone filter bank.");
 		return false;
@@ -330,6 +338,7 @@ void AudioPreprocessorPeriodicThread::threadRelease() {
 	//-- Stop all threads.
 	inRawAudioPort.interrupt();
 	inHeadAnglePort.interrupt();
+    outRawPowerPort.interrupt();
 	outGammatoneFilteredAudioPort.interrupt();
 	outGammatoneFilteredPowerPort.interrupt();
 	outGammatoneFilteredWindowPort.interrupt();
@@ -349,6 +358,7 @@ void AudioPreprocessorPeriodicThread::threadRelease() {
 	//-- Close the threads.
 	inRawAudioPort.close();
 	inHeadAnglePort.close();
+    outRawPowerPort.close();
 	outGammatoneFilteredAudioPort.close();
 	outGammatoneFilteredPowerPort.close();
 	outGammatoneFilteredWindowPort.close();
@@ -437,6 +447,18 @@ bool AudioPreprocessorPeriodicThread::processing() {
 	AudioUtil::SoundToMatrix(inputSound, RawAudioMatrix, sampleNormaliser);
 
 	// std::cout << RawAudioMatrix.toString() << "\n\n" << std::endl;
+
+    /* ===========================================================================
+     * compute the power of the audio from each mic
+     * =========================================================================== */
+    if (outRawPowerPort.getOutputCount()) {
+        AudioUtil::computePower(
+                RawAudioMatrix,
+                RawPowerMatrix,
+                numFrameSamples,
+                numMics
+                );
+    }
 
 	/* ===========================================================================
 	 *  Apply a 4th order gammatone filter onto the raw audio for the 
@@ -636,6 +658,12 @@ bool AudioPreprocessorPeriodicThread::processing() {
 
 
 void AudioPreprocessorPeriodicThread::publishOutPorts() {
+
+    if(outRawPowerPort.getOutputCount()){
+        outRawPowerPort.prepare() = RawPowerMatrix;
+        outRawPowerPort.setEnvelope(timeStamp);
+        outRawPowerPort.write();
+    }
 	
 	//-- Write to Active Ports.
 	if (outGammatoneFilteredAudioPort.getOutputCount()) {

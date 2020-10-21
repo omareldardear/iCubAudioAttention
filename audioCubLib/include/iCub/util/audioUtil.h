@@ -158,6 +158,17 @@ namespace AudioUtil {
      * @param flag         : Operation to do on each window ( mean | rms ).
      * ================================================================ */
     void WindowMatrix(const yMatrix& source, yMatrix& target, const size_t windowLength, const size_t hopLength, const std::string flag);
+
+
+    /* ================================================================
+     *  Audio Power Computation
+     *
+     * @param RawAudio              : the matrix of the raw audio. (numOfMics*numFrameSamples)
+     * @param rawPower              : the reference of the output power matrix. (numOfMics*1)
+     * @param numFrameSamples       : number of Frame samples
+     * @param numMics               : number of microphones (audio channels)
+     * ================================================================ */
+    void computePower(const yarp::sig::Matrix& rawAudio, yarp::sig::Matrix& rawPower,const int numFrameSamples, const int numMics);
 }
 
 #endif  //_AUDIO_UTIL_H

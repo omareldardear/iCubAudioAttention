@@ -8,7 +8,23 @@
 
     <!-->
 
-    <!-->  
+    <!-->
+   Raw Power.
+   <!-->
+    <module>
+        <name> frequencyVisualisation </name>
+        <parameters> --name /rawPowerVisualiser </parameters>
+        <node> icub </node>
+    </module>
+
+    <module>
+        <name> yarpview </name>
+        <parameters> --x 100 --y 100 --h 320 --w 240 --r 33 --name /rawPowerView </parameters>
+        <node> icub </node>
+    </module>
+
+
+    <!-->
     Gammatone Filtered Audio.
     <!-->
     <module>
@@ -24,7 +40,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Gammatone Filtered Power.
     <!-->
     <module>
@@ -40,7 +56,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Gammatone Filtered Window.
     <!-->
     <module>
@@ -55,8 +71,8 @@
         <node> icub </node>
     </module>
 
-  
-    <!-->  
+
+    <!-->
     Beamformed Audio.
     <!-->
     <module>
@@ -72,7 +88,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Beamformed Window.
     <!-->
     <module>
@@ -88,7 +104,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     RMS of Beamformed Audio.
     <!-->
     <module>
@@ -102,9 +118,9 @@
         <parameters> --x 100 --y 100 --h 320 --w 240 --r 33 --name /beamformedRmsAudioView </parameters>
         <node> icub </node>
     </module>
-	
 
-    <!-->  
+
+    <!-->
     RMS of Beamformed Power.
     <!-->
     <module>
@@ -120,7 +136,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Allocentric Audio Map.
     <!-->
     <module>
@@ -136,7 +152,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Hilbert Envelope.
     <!-->
     <module>
@@ -152,7 +168,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Hilbert Envelope Window.
     <!-->
     <module>
@@ -168,7 +184,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Band Passed Envelope.
     <!-->
     <module>
@@ -184,7 +200,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Band Passed Envelope Window.
     <!-->
     <module>
@@ -200,7 +216,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     RMS of Band Passed Envelope.
     <!-->
     <module>
@@ -216,7 +232,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     RMS of Band Passed Power.
     <!-->
     <module>
@@ -232,7 +248,7 @@
     </module>
 
 
-    <!-->  
+    <!-->
     Allocentric Envelope Map.
     <!-->
     <module>
@@ -248,11 +264,24 @@
     </module>
 
 
-    <!-->  
+    <!-->
 
-        Connections for Ports. 
+        Connections for Ports.
 
     <!-->
+    <!--> ############# Gammatone Filtered Audio ############# <!-->
+    <connection>
+        <from> /audioPreprocessor/rawPower:o </from>
+        <to>   /rawPowerVisualiser/map:i     </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /rawPowerVisualiser/img:o  </from>
+        <to>   /rawPowerView              </to>
+        <protocol> tcp </protocol>
+    </connection>
+
 
 
     <!--> ############# Gammatone Filtered Audio ############# <!-->

@@ -423,4 +423,14 @@ void AudioUtil::WindowMatrix(const yMatrix& source, yMatrix& target, const size_
     }
 }
 
-
+void AudioUtil::computePower(const yarp::sig::Matrix& rawAudio, yarp::sig::Matrix& rawPower,const int numFrameSamples, const int numMics){
+    //-- Ensure space is allocated for the powermap.
+    rawPower.resize(numMics,1 );
+    for (int mic = 0; mic < numMics; mic++) {
+        double micSum = 0.0;
+        for (int sample = 0; sample < numFrameSamples; sample++) {
+            micSum += pow(rawAudio[mic][sample], 2.0);
+        }
+        rawPower[mic][0] = sqrt( micSum / (double) numFrameSamples );
+    }
+}
