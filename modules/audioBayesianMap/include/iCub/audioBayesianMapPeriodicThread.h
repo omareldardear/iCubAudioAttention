@@ -74,16 +74,20 @@ class AudioBayesianMapPeriodicThread : public yarp::os::PeriodicThread {
 	 *  Yarp Ports for Sending and Receiving Data from this Periodic Thread.
 	 * =========================================================================== */
 	yMatrixBuffer inAllocentricMapPort;
+    yMatrixBuffer outBandPowerMapPort;
 	yMatrixBuffer outProbabilityMapPort;
 	yMatrixBuffer outProbabilityAnglePort;
+    yMatrixBuffer outProbabilityAngle_WithGainPort;
 
 	/* ===========================================================================
 	 *  Yarp Matrices used for Modules Computation. 
 	 *    Objects passed around to encapsulated objects.
 	 * =========================================================================== */
 	yMatrix AllocentricMapMatrix;
-	yMatrix ProbabilityMapMatrix;
+    yMatrix BandPowerMapMatrix;
+    yMatrix ProbabilityMapMatrix;
 	yMatrix ProbabilityAngleMatrix;
+    yMatrix ProbabilityAngleMatrix_withGain;
 
 	/* ===========================================================================
 	 *  Buffer for ``remembering`` some number of states.
@@ -203,6 +207,9 @@ class AudioBayesianMapPeriodicThread : public yarp::os::PeriodicThread {
 
   private:
 
+    //band power computation
+    void updateBandPowerMatrix(const yMatrix& CurrentAudio, yMatrix& PowerMap);
+
 	/* ===========================================================================
 	 *  Does it all. Performs a bayesian update on the probability map using
 	 *    the new audio map provided. Afterwards the new map will be inserted 
@@ -261,6 +268,17 @@ class AudioBayesianMapPeriodicThread : public yarp::os::PeriodicThread {
 	 * @param ProbabilityAngles : Angles of Probability.
 	 * =========================================================================== */
 	void collapseProbabilityMap(const yMatrix& ProbabilityMap, yMatrix& ProbabilityAngles);
+
+
+    /* ===========================================================================
+     *  Collapse a Probability Map across the bands to get the overall
+     *    probability at each angle of the knowledge state.
+     *
+     * @param ProbabilityMap    : Knowledge state of the auditory environment.
+     * @param PowerMap          : Knowledge state of the power of the auditory environment per each band.
+     * @param ProbabilityAngles : Angles of Probability.
+     * =========================================================================== */
+    void collapseProbabilityMapWithGain(const yMatrix& ProbabilityMap,const yMatrix& PowerMap, yMatrix& ProbabilityAngles_WithGain);
 
 
 	/* ===========================================================================
