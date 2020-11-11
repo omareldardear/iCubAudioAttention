@@ -284,7 +284,7 @@ bool AudioBayesianMapPeriodicThread::processing() {
 	    collapseProbabilityMapWithGain (
                 /* Source = */ ProbabilityMapMatrix,
                 /* Source = */ BandPowerMapMatrix,
-                /* Target = */ ProbabilityAngleMatrix
+                /* Target = */ ProbabilityAngleMatrix_withGain
         );
 	}
 
