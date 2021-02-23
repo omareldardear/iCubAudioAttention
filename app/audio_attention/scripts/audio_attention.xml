@@ -1,0 +1,70 @@
+<application>
+
+    <name> Audio Attention </name>
+
+    <!-->  
+    MODULES.    
+    <!-->
+    <module>
+        <name> remoteInterface </name>
+        <parameters> </parameters>
+        <node> icub-head </node>
+    </module>
+
+    <module>
+        <name> audioPreprocessor </name>
+        <parameters> </parameters>
+        <node> icubsrv </node>
+    </module>
+
+    <module>
+        <name> audioBayesianMap </name>
+        <parameters> </parameters>
+        <node> icubsrv </node>
+    </module>
+
+    <module>
+        <name> allocentricAudioPriorAdder </name>
+        <parameters> </parameters>
+        <node> icubsrv </node>
+    </module>
+    <!-->  
+    CONNECTIONS.
+    <!-->
+    <connection>
+        <from> /rawAudio:o                   </from>
+        <to>   /audioPreprocessor/rawAudio:i </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /icub/head/state:o             </from>
+        <to>   /audioPreprocessor/headAngle:i </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /audioPreprocessor/allocentricAudio:o </from>
+        <to>   /audioBayesianMap/allocentricMap:i    </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /audioPreprocessor/allocentricEnvelope:o </from>
+        <to>   /audioBayesianMap/allocentricMap:i       </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /audioBayesianMap/bayesianProbabilityAngle:o </from>
+        <to>   /allocentricAudioPriorAdder/probabilityAngleMap:i       </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+    <connection>
+        <from> /audioPreprocessor/rawPower:o </from>
+        <to>   /allocentricAudioPriorAdder/rawPower:i       </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+</application>

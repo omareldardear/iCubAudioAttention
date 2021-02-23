@@ -241,8 +241,8 @@ void Beamformer::mirrorFrontField(const yarp::sig::Matrix& FrontFieldAudio, yarp
         for (index = 0; index <= half_length; index++) {
 
             //-- Both start in middle. idx0 moves right, idx1 moves left.
-            idx0 = AudioUtil::myMod_int(half_length + index + offset, numFullFieldAngles);
-            idx1 = AudioUtil::myMod_int(half_length - index + offset, numFullFieldAngles);
+            idx0 = AudioUtil::myMod_int(half_length + index - offset, numFullFieldAngles);
+            idx1 = AudioUtil::myMod_int(half_length - index - offset, numFullFieldAngles);
 
             FullFieldAudio[row][idx0] = FrontFieldAudio[row][index];
             FullFieldAudio[row][idx1] = FrontFieldAudio[row][index];   
@@ -251,8 +251,8 @@ void Beamformer::mirrorFrontField(const yarp::sig::Matrix& FrontFieldAudio, yarp
         for (index = half_length+1; index < full_length; index++) {
 
             //-- Start at middle and far right. Move towards eachother.
-            idx0 = AudioUtil::myMod_int(half_length  + index + offset, numFullFieldAngles);
-            idx1 = AudioUtil::myMod_int(two_and_half - index + offset, numFullFieldAngles);
+            idx0 = AudioUtil::myMod_int(half_length  + index - offset, numFullFieldAngles);
+            idx1 = AudioUtil::myMod_int(two_and_half - index - offset, numFullFieldAngles);
 
             FullFieldAudio[row][idx0] = FrontFieldAudio[row][index];
             FullFieldAudio[row][idx1] = FrontFieldAudio[row][index];   
