@@ -1,5 +1,8 @@
 /build-x86_64/*
 /build-pc104/*
 /build-mac/*
+/build/*
 /data/*
+/cmake-build-debug/*
 /.vscode/*
+/.idea/*

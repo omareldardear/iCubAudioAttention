@@ -16,5 +16,6 @@ else( ENABLE_COMPILE_ON_PC104 )
     add_subdirectory( frequencyVisualisation )
     add_subdirectory( remoteInterface        )
     add_subdirectory( mapDifferentiator      )
+    add_subdirectory( powerTrigger           )
 
 endif( ENABLE_COMPILE_ON_PC104 )
