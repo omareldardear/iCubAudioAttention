@@ -21,7 +21,7 @@ INCLUDE_DIRECTORIES(
         ${ICUB_INCLUDE_DIRS}
         ${ICUB_CONTRIB_DIRS}
         ${attentionLib_INCLUDE_DIRS}
-        ${IDL_INCLUDE_DIRS}
+
 )
 
 # Search for source code.
@@ -42,7 +42,7 @@ IF (folder_source)
 
     TARGET_LINK_LIBRARIES(${KEYWORD}
             ${YARP_LIBRARIES}
-            IDL_Interfaces
+            
             )
 
     INSTALL_TARGETS(/bin ${KEYWORD})

@@ -40,7 +40,7 @@ enum TRIGGER_EVENTS{
     OFF = 1,
     RETURN_ON = 2,
     OFF_BUFFERED = 3,
-}
+};
     
 class powerTriggerThread : public PeriodicThread {
 
