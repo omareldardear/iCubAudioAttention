@@ -42,7 +42,7 @@ IF (folder_source)
 
     TARGET_LINK_LIBRARIES(${KEYWORD}
             ${YARP_LIBRARIES}
-            
+
             )
 
     INSTALL_TARGETS(/bin ${KEYWORD})

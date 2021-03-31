@@ -29,6 +29,7 @@ powerTriggerThread::powerTriggerThread(string moduleName):PeriodicThread(THPERIO
     instantStateOutPortName =  getName("/instantState:o");
     bufferedStateOutPortName =  getName("/bufferedState:o");
     eventStateCmdPortName =  getName("/eventState:oi");
+    stateVisualizerPortName = getName("/visualizer:o");
 
     /* ===========================================================================
 	 *  initialize the variables
