@@ -104,6 +104,7 @@ void powerTriggerThread::run() {
 
     publishStateOnPorts();
     publishEventsOnPorts();
+    publishVisualzation();
 
     previousBufferedState = bufferedState;
     previousState = currentState;
@@ -116,11 +117,13 @@ void powerTriggerThread::threadRelease() {
     instantStateOutPort.interrupt();
     bufferedStateOutPort.interrupt();
     eventStateCmdPort.interrupt();
+    stateVisualizerOutPort.interrupt();
 
     rawPowerInPort.close();
     instantStateOutPort.close();
     bufferedStateOutPort.close();
     eventStateCmdPort.close();
+    stateVisualizerOutPort.close();
  
 }
 
@@ -149,6 +152,11 @@ bool powerTriggerThread::threadInit() {
 
     if (!eventStateCmdPort.open(eventStateCmdPortName)) {
         yError("Unable to open %s port ",eventStateCmdPortName.c_str());
+        return false;
+    }
+
+    if (!stateVisualizerOutPort.open(stateVisualizerPortName)) {
+        yError("Unable to open %s port ",stateVisualizerPortName.c_str());
         return false;
     }
 
@@ -202,6 +210,52 @@ void powerTriggerThread::publishEventsOnPorts() {
         tmp.addInt(event);
         eventStateCmdPort.write(tmp,reply);
         yInfo("reply is %s",reply.toString().c_str());
+
+    }
+
+}
+
+void powerTriggerThread::publishVisualzation() {
+    if (stateVisualizerOutPort.getOutputCount()){
+        stateVisualizerImg.resize(400,200);
+        stateVisualizerImg.zero();
+        if(currentState){
+            draw::addCircle(stateVisualizerImg,
+                            PixelRgb(0,255,0),
+                            (int) stateVisualizerImg.width()/4,
+                            (int) stateVisualizerImg.height()/2,
+                            (int) stateVisualizerImg.height()/4);
+
+        }
+        else{
+            draw::addCircle(stateVisualizerImg,
+                            PixelRgb(255,0,0),
+                            (int) stateVisualizerImg.width()/4,
+                            (int) stateVisualizerImg.height()/2,
+                            (int) stateVisualizerImg.height()/4);
+        }
+
+
+        if(bufferedState){
+            draw::addCircle(stateVisualizerImg,
+                            PixelRgb(0,255,0),
+                            (int) stateVisualizerImg.width()/4*3,
+                            (int) stateVisualizerImg.height()/2,
+                            (int) stateVisualizerImg.height()/4);
+
+        }
+        else{
+            draw::addCircle(stateVisualizerImg,
+                            PixelRgb(255,0,0),
+                            (int) stateVisualizerImg.width()/4*3,
+                            (int) stateVisualizerImg.height()/2,
+                            (int) stateVisualizerImg.height()/4);
+
+        }
+
+        yImgPixelRgb & publishedImage = stateVisualizerOutPort.prepare();
+        publishedImage.copy(stateVisualizerImg);
+        stateVisualizerOutPort.write();
 
     }
 

@@ -29,10 +29,15 @@
 #include <yarp/os/all.h>
 
 using namespace yarp::os;
+using namespace yarp::sig;
 using namespace std;
 
 typedef yarp::sig::Matrix yMatrix;
 typedef yarp::os::BufferedPort< yMatrix > yMatrixBuffer;
+
+typedef yarp::sig::ImageOf<yarp::sig::PixelRgb>  yImgPixelRgb;
+typedef yarp::os::BufferedPort<yImgPixelRgb> yImgPixelRgbBuffer;
+
 
 
 enum TRIGGER_EVENTS{
@@ -68,6 +73,7 @@ private:
     string instantStateOutPortName;
     string bufferedStateOutPortName;
     string eventStateCmdPortName;
+    string stateVisualizerPortName;
 
     /* ===========================================================================
 	 *  Params
@@ -91,6 +97,7 @@ private:
     BufferedPort<Bottle> instantStateOutPort;
     BufferedPort<Bottle> bufferedStateOutPort;
     RpcClient eventStateCmdPort;
+    yImgPixelRgbBuffer stateVisualizerOutPort;
 
 
     /* ===========================================================================
@@ -98,6 +105,7 @@ private:
 	 * =========================================================================== */
 
     yMatrix rawPowerMatrix;
+    yImgPixelRgb stateVisualizerImg;
 
 
     /* ===========================================================================
@@ -115,6 +123,7 @@ private:
 
     void publishStateOnPorts();
     void publishEventsOnPorts();
+    void publishVisualzation();
 
 
 };
