@@ -59,7 +59,7 @@ bool powerTriggerThread::configure(yarp::os::ResourceFinder &rf){
 
     positiveThreshold = rf.findGroup("powerRanges").check("positiveThreshold",yarp::os::Value(true),"positive audio motor action threshold  (boolean)").asFloat64();
     negativeThreshold = rf.findGroup("powerRanges").check("negativeThreshold",yarp::os::Value(false),"negative audio motor action threshold  (boolean)").asFloat64();
-    onPowerThreshold  = rf.findGroup("DecisionMaking").check("audioPowerThreshold", yarp::os::Value(1.25), "threshold of the power of the audio for triggering the action(float)").asFloat64();
+    onPowerThreshold  = rf.findGroup("powerRanges").check("onPowerThreshold", yarp::os::Value(1.25), "threshold of the power of the audio for triggering the action(float)").asFloat64();
 
 
     yInfo( "\t                [powerRanges]                 "                               );
