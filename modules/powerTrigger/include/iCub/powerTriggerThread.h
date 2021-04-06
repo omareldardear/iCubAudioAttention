@@ -72,7 +72,7 @@ private:
     string rawPowerInPortName;
     string instantStateOutPortName;
     string bufferedStateOutPortName;
-    string eventStateCmdPortName;
+    string eventStateOutPortName;
     string stateVisualizerPortName;
 
     /* ===========================================================================
@@ -96,7 +96,7 @@ private:
     yMatrixBuffer rawPowerInPort;
     BufferedPort<Bottle> instantStateOutPort;
     BufferedPort<Bottle> bufferedStateOutPort;
-    RpcClient eventStateCmdPort;
+    BufferedPort<Bottle> eventStateOutPort;
     yImgPixelRgbBuffer stateVisualizerOutPort;
 
 

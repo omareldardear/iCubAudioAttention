@@ -28,7 +28,7 @@ powerTriggerThread::powerTriggerThread(string moduleName):PeriodicThread(THPERIO
     rawPowerInPortName =  getName("/rawPower:i");
     instantStateOutPortName =  getName("/instantState:o");
     bufferedStateOutPortName =  getName("/bufferedState:o");
-    eventStateCmdPortName =  getName("/eventState:oi");
+    eventStateOutPortName =  getName("/eventState:o");
     stateVisualizerPortName = getName("/visualizer:o");
 
     /* ===========================================================================
@@ -117,13 +117,13 @@ void powerTriggerThread::threadRelease() {
     rawPowerInPort.interrupt();
     instantStateOutPort.interrupt();
     bufferedStateOutPort.interrupt();
-    eventStateCmdPort.interrupt();
+    eventStateOutPort.interrupt();
     stateVisualizerOutPort.interrupt();
 
     rawPowerInPort.close();
     instantStateOutPort.close();
     bufferedStateOutPort.close();
-    eventStateCmdPort.close();
+    eventStateOutPort.close();
     stateVisualizerOutPort.close();
  
 }
@@ -151,8 +151,8 @@ bool powerTriggerThread::threadInit() {
         return false;
     }
 
-    if (!eventStateCmdPort.open(eventStateCmdPortName)) {
-        yError("Unable to open %s port ",eventStateCmdPortName.c_str());
+    if (!eventStateOutPort.open(eventStateOutPortName)) {
+        yError("Unable to open %s port ", eventStateOutPortName.c_str());
         return false;
     }
 
@@ -205,12 +205,11 @@ void powerTriggerThread::publishEventsOnPorts() {
         yInfo("OFF BUFFERED EVENT %d",event);
     }
 
-    if(isEvent && eventStateCmdPort.getOutputCount()){
+    if(isEvent && eventStateOutPort.getOutputCount()){
         Bottle tmp;
-        Bottle reply;
         tmp.addInt(event);
-        eventStateCmdPort.write(tmp,reply);
-        yInfo("reply is %s",reply.toString().c_str());
+        eventStateOutPort.prepare() = tmp;
+        eventStateOutPort.write();
 
     }
 
